@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="group_comissions_porcentaje" model="res.groups">
+			<field name="name">Por porcentaje comisiones</field>
+			<field name="category_id" ref="base.module_category_hidden"/>
+		</record>	
+		<record id="group_comissions_monto" model="res.groups">
+			<field name="name">Por monto fijo comisiones</field>
+			<field name="category_id" ref="base.module_category_hidden"/>
+		</record>
+		<record id="group_comissions_clientes" model="res.groups">
+			<field name="name">Por Modalidad Cliente</field>
+			<field name="category_id" ref="base.module_category_hidden"/>
+		</record>	
+		<record id="group_comissions_productos" model="res.groups">
+			<field name="name">Por Modalidad Productos</field>
+			<field name="category_id" ref="base.module_category_hidden"/>
+		</record>
+	</data>
+</odoo>

@@ -5,6 +5,11 @@
 		<field name="model">sale.order</field>
 		<field name="inherit_id" ref="sale.view_order_form" />
 		<field name="arch" type="xml">
+			<xpath expr="//field[@name='client_order_ref']" position="after">
+				
+						<field name="as_reference" />
+					
+			</xpath>
 		<xpath expr="//page[@name='other_information']" position="inside">
 				<field name="referencia_ids" mode="tree">
 					<tree editable="bottom">
@@ -25,6 +30,9 @@
 
 
 			<xpath expr="//page[@id='other_tab']" position="inside">
+			<group>
+				<field name="as_reference" />
+			</group>
 				<field name="referencias" mode="tree">
 					<tree editable="bottom">
 						<field name="fecha_documento" />

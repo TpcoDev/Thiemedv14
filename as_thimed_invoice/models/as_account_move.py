@@ -13,6 +13,7 @@ class SO(models.Model):
         'mv_id',
         string="Referencias de documento"
     )
+    as_reference= fields.Char('Referencia/Descripción')
 
 class SaleAdvancePaymentInv(models.TransientModel):
     _inherit = "sale.advance.payment.inv"
@@ -23,6 +24,6 @@ class SaleAdvancePaymentInv(models.TransientModel):
         if order.referencia_ids:
             for ref in order.referencia_ids:
                 vals.append(ref.id)
-            res.write({'referencias':vals})
+            res.write({'referencias':vals,'as_reference':order.as_reference})
       
         return res

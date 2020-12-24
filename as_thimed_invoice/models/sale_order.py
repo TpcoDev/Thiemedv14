@@ -13,6 +13,7 @@ class SO(models.Model):
         'so_id',
         string="Referencias de documento"
     )
+    as_reference= fields.Char('Referencia/Descripción')
 
     def _prepare_invoice(self):
         vals = super(SO, self)._prepare_invoice()

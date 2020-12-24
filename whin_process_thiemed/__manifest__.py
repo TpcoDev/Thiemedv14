@@ -4,7 +4,7 @@
 
 {
     'name': 'WH/IN Process Thiemed',
-    'version': '11.0.0.4',
+    'version': '14.0.0.0',
     'category': 'Accounting',
     'summary': 'Make the WH/IN Process for Thiemed',
     'description': """

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- <record id="product_product_landed_cost_1" model="product.product">
+      <field name="name">Landed Cost 1</field>
+      <field name="type">service</field>
+      <field name="categ_id" ref="product.product_category_all"/>
+      <field name="sale_ok" eval="False"/>
+      <field name="purchase_ok" eval="True"/>
+      <field name="list_price">0.0</field>
+      <field name="landed_cost_ok" eval="True"/>
+      <field name="split_method">by_current_cost_price</field>
+    </record>
+    <record id="product_product_landed_cost_2" model="product.product">
+      <field name="name">Landed Cost 2</field>
+      <field name="type">service</field>
+      <field name="categ_id" ref="product.product_category_all"/>
+      <field name="sale_ok" eval="False"/>
+      <field name="purchase_ok" eval="True"/>
+      <field name="list_price">0.0</field>
+      <field name="landed_cost_ok" eval="True"/>
+      <field name="split_method">by_current_cost_price</field>
+    </record> -->
+</odoo>

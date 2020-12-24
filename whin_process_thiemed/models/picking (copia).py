@@ -248,7 +248,6 @@ class stock_picking(models.Model):
     _inherit = 'stock.picking'
 
     @api.depends('state')
-    @api.one
     def _get_invoiced(self):
         for order in self:
             invoice_ids = self.env['account.move'].search([('picking_id','=',order.id)])

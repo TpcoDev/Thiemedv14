@@ -28,6 +28,24 @@ class SOR(models.Model):
             copy=False,
             string="Documento",
         )
+    mv_id = fields.Many2one(
+            'account.move',
+            ondelete='cascade',
+            index=True,
+            copy=False,
+            string="Factura",
+        )
+    origin = fields.Char(
+            string="Origen",
+        )
+
+    @api.onchange('folio')
+    def gte_refrencia(self):
+        if self._origin.so_id:
+            self._origin.so_id.client_order_ref = self._origin.folio
+
+
+
 
 class sii_document_class(models.Model):
     _name = 'sii.document_class'

@@ -40,6 +40,7 @@ class SOR(models.Model):
         )
 
     @api.onchange('folio')
+    @api.depends('folio')
     def gte_refrencia(self):
         if self._origin.so_id:
             self._origin.so_id.as_reference = self._origin.folio

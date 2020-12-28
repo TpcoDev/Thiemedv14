@@ -48,7 +48,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem name="Document Classes" action="act_sii_document_class" id="menu_action_sii_document_class" parent="sale.sale_menu_config_activity_type"/>
+        <menuitem name="Document Classes" action="act_sii_document_class" id="menu_action_sii_document_class" parent="sale.menu_sale_config"/>
 
     </data>
 </odoo>

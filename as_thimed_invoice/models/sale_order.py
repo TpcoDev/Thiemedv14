@@ -30,6 +30,11 @@ class SO(models.Model):
                 )
         return vals
 
+    @api.onchange('referencia_ids')
+    @api.depends('referencia_ids')
+    def gte_refrencia(self):
+        if self.referencia_ids:
+            self.as_reference = self.referencia_ids[0].folio
 
 
     def action_confirm(self):

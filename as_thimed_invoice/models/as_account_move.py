@@ -15,6 +15,13 @@ class SO(models.Model):
     )
     as_reference= fields.Char('Referencia/Descripción')
 
+    @api.onchange('referencia_ids')
+    @api.depends('referencia_ids')
+    def gte_refrencia(self):
+        if self.referencias:
+            self.as_reference = self.referencias[0].folio
+
+
 class SaleAdvancePaymentInv(models.TransientModel):
     _inherit = "sale.advance.payment.inv"
 

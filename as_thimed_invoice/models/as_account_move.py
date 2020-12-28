@@ -20,6 +20,7 @@ class SO(models.Model):
     def gte_refrencia(self):
         if self.referencias:
             self.as_reference = self.referencias[0].folio
+            self.ref = self.referencias[0].folio
 
 
 class SaleAdvancePaymentInv(models.TransientModel):

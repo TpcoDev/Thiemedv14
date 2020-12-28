@@ -35,6 +35,7 @@ class SO(models.Model):
     def gte_refrencia(self):
         if self.referencia_ids:
             self.as_reference = self.referencia_ids[0].folio
+            self.client_order_ref = self.referencia_ids[0].folio
 
 
     def action_confirm(self):

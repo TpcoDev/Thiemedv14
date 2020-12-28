@@ -85,15 +85,15 @@ class AccountInvoiceLine(models.Model):
     @api.onchange('product_id')
     def _onchange_product_id(self):
         domain = {}
-        if not self.invoice_id:
+        if not self.move_id:
             return
 
-        part = self.invoice_id.partner_id
-        fpos = self.invoice_id.fiscal_position_id
-        company = self.invoice_id.company_id
-        currency = self.invoice_id.currency_id
-        type = self.invoice_id.type
-        self.analytic_tag_ids = self.invoice_id.analytic_tag_ids
+        part = self.move_id.partner_id
+        fpos = self.move_id.fiscal_position_id
+        company = self.move_id.company_id
+        currency = self.move_id.currency_id
+        type = self.move_id.type
+        self.analytic_tag_ids = self.move_id.analytic_tag_ids
 
         if not part:
             warning = {

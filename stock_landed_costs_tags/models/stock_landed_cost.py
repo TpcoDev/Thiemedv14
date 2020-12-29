@@ -58,7 +58,7 @@ class LandedCost(models.Model):
                 'product_id': move.product_id.id,
                 'move_id': move.id,
                 'quantity': move.product_qty,
-                'former_cost': move.value,
+                'former_cost': move.product_id.standard_price,
                 'weight': move.product_id.weight * move.product_qty,
                 'volume': move.product_id.volume * move.product_qty
             }
@@ -85,5 +85,5 @@ class AdjustmentLines(models.Model):
         """Computes the new cost amount"""
         for record in self:
             record.new_cost = (
-                record.former_cost_per_unit + record.additional_landed_cost
+                record.final_cost + record.additional_landed_cost
                 / record.quantity)

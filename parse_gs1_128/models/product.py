@@ -27,29 +27,29 @@ class ProductTemplate(models.Model):
     edit_gs1_code = fields.Boolean("Edit GS1-128 code", store=True)
     gs1_128_code = fields.Char("GS1-128 code", store=True)
     
-    @api.model
-    def create(self, vals):
-        result = super(ProductTemplate, self).create(vals)
+    # @api.model
+    # def create(self, vals):
+    #     result = super(ProductTemplate, self).create(vals)
         
-        if 'gs1_128_code' in vals:
-            result.write({'gs1_128_code': vals['gs1_128_code']})
+    #     if 'gs1_128_code' in vals:
+    #         result.write({'gs1_128_code': vals['gs1_128_code']})
         
-        return result
+    #     return result
 
-    def write(self, vals):
-        if self.env.context.get('finish', False) == True:
-            return super(ProductTemplate, self).write(vals)
+    # def write(self, vals):
+    #     if self.env.context.get('finish', False) == True:
+    #         return super(ProductTemplate, self).write(vals)
         
-        if 'gs1_128_code' in vals:
-            super(ProductTemplate, self).write(vals)
-            results = self.search([('id', 'in', self._ids)])
-            for r in results:
-                if len(r.product_variant_ids) == 1:
-                    for p in r.product_variant_ids:
-                        if p.id:
-                            p.with_context({'finish': True}).write({'gs1_128_code': vals['gs1_128_code']})
+    #     if 'gs1_128_code' in vals:
+    #         super(ProductTemplate, self).write(vals)
+    #         results = self.search([('id', 'in', self._ids)])
+    #         for r in results:
+    #             if len(r.product_variant_ids) == 1:
+    #                 for p in r.product_variant_ids:
+    #                     if p.id:
+    #                         p.with_context({'finish': True}).write({'gs1_128_code': vals['gs1_128_code']})
             
-        return super(ProductTemplate, self).write(vals)
+    #     return super(ProductTemplate, self).write(vals)
 
 class ProductProduct(models.Model):
     _inherit = ["product.product"]
@@ -129,50 +129,50 @@ class ProductProduct(models.Model):
             products = self.search(args, limit=limit)
         return products.name_get()
     
-    @api.model
-    def create(self, vals):
-        result = super(ProductProduct, self).create(vals)
+    # @api.model
+    # def create(self, vals):
+    #     result = super(ProductProduct, self).create(vals)
         
-        if 'gs1_128_code' in vals:
-            result.write({'gs1_128_code': vals['gs1_128_code']})
+    #     if 'gs1_128_code' in vals:
+    #         result.write({'gs1_128_code': vals['gs1_128_code']})
         
-        return result
+    #     return result
     
-    def write(self, vals):
-        if 'gs1_128_code' in vals:
-            result = tools_parse.parse_gs1_128(vals['gs1_128_code'])
-            for r in result:
-                if r['code'] == '01':
-                    vals.update({'barcode': r['data']})
-                elif r['code'] == '17':
-                    lote = [item for item in result if item["code"] == "10"]
-                    if len(lote) > 0:
-                        lote = lote[0]
-                        stock_production_lot = self.env['stock.production.lot'].search([('name','=ilike',lote['data'].upper()),('product_id','=',self.id)])
-                        if len(stock_production_lot) == 0:
-                            stock_production_lot = self.env['stock.production.lot'].create({'name': lote['data'].upper(), 'product_id': self.id})
+    # def write(self, vals):
+    #     if 'gs1_128_code' in vals:
+    #         result = tools_parse.parse_gs1_128(vals['gs1_128_code'])
+    #         for r in result:
+    #             if r['code'] == '01':
+    #                 vals.update({'barcode': r['data']})
+    #             elif r['code'] == '17':
+    #                 lote = [item for item in result if item["code"] == "10"]
+    #                 if len(lote) > 0:
+    #                     lote = lote[0]
+    #                     stock_production_lot = self.env['stock.production.lot'].search([('name','=ilike',lote['data'].upper()),('product_id','=',self.id)])
+    #                     if len(stock_production_lot) == 0:
+    #                         stock_production_lot = self.env['stock.production.lot'].create({'name': lote['data'].upper(), 'product_id': self.id})
                         
-                        if r['data'].endswith('00'):
-                            date = (datetime.strptime(r['data'][:4], "%y%m") +
-                                    relativedelta(months=1) - relativedelta(days=1))
-                        else:
-                            date = datetime.strptime(r['data'], '%y%m%d')
+    #                     if r['data'].endswith('00'):
+    #                         date = (datetime.strptime(r['data'][:4], "%y%m") +
+    #                                 relativedelta(months=1) - relativedelta(days=1))
+    #                     else:
+    #                         date = datetime.strptime(r['data'], '%y%m%d')
                             
-                        if len(stock_production_lot) > 0:
-                            date = datetime.combine(date, time(12, 00))
-                            date_result = date.strftime(DATEFMT)
-                            stock_production_lot.write({'use_date': date_result,
-                                                'life_date': date_result,
-                                                'removal_date': date_result,
-                                                'alert_date': date_result,})
+    #                     if len(stock_production_lot) > 0:
+    #                         date = datetime.combine(date, time(12, 00))
+    #                         date_result = date.strftime(DATEFMT)
+    #                         stock_production_lot.write({'use_date': date_result,
+    #                                             'life_date': date_result,
+    #                                             'removal_date': date_result,
+    #                                             'alert_date': date_result,})
                                                                                             
-                elif r['code'] == '10' or r['code'] == '21':
-                    if r['code'] == '10':
-                        vals.update({'tracking': 'lot'})
-                    elif r['code'] == '21':
-                        vals.update({'tracking': 'serial'})
-                    stock_production_lot = self.env['stock.production.lot'].search([('name','=ilike',r['data'].upper()),('product_id','=',self.id)])
-                    if len(stock_production_lot) == 0:
-                        self.env['stock.production.lot'].create({'name': r['data'].upper(), 'product_id': self.id})
+    #             elif r['code'] == '10' or r['code'] == '21':
+    #                 if r['code'] == '10':
+    #                     vals.update({'tracking': 'lot'})
+    #                 elif r['code'] == '21':
+    #                     vals.update({'tracking': 'serial'})
+    #                 stock_production_lot = self.env['stock.production.lot'].search([('name','=ilike',r['data'].upper()),('product_id','=',self.id)])
+    #                 if len(stock_production_lot) == 0:
+    #                     self.env['stock.production.lot'].create({'name': r['data'].upper(), 'product_id': self.id})
             
-        return super(ProductProduct, self).write(vals)
+    #     return super(ProductProduct, self).write(vals)

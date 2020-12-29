@@ -2,7 +2,7 @@
 <odoo>
     <template id="stock_report_deliveryslip_inherit_product_expiry" inherit_id="stock.report_delivery_document">
         <xpath expr="//div[@class='page']" position="inside">
-            <div style="margin-top:500px"></div>
+        
             <p t-field="o.note" />
         </xpath>
     </template>
@@ -190,7 +190,7 @@
                    No se pueden reservar todos los productos. Haga clic en el botón "Verificar disponibilidad" para intentar reservar
                     productos.
                 </p>
-                 <div style="margin-top:500px"><p t-field="o.note" /></div>
+                 <div><p t-field="o.note" /></div>
                 
             </div>
         </xpath>

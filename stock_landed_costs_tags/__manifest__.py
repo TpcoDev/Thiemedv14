@@ -8,7 +8,7 @@
     'website': "https://odoolatam.odoo.com/",
 
     'category': 'Warehouse',
-    'version': '11.0.0.0.0',
+    'version': '1.0.0',
 
     'depends': [
         'account_invoicing',

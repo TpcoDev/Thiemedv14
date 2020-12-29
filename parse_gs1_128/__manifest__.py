@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name' : 'Parse GS1-128',
-    'version' : '1.0',
+    'version' : '1.0.0',
     'author' : 'Odoo Latam',
     'category' : 'Inventory',
     'description' : """

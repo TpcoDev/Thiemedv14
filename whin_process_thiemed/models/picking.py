@@ -92,7 +92,7 @@ class AccountInvoiceLine(models.Model):
         fpos = self.move_id.fiscal_position_id
         company = self.move_id.company_id
         currency = self.move_id.currency_id
-        type = self.move_id.type
+        move_type = self.move_id.move_type
         self.analytic_tag_ids = self.move_id.analytic_tag_ids
 
         if not part:
@@ -103,7 +103,7 @@ class AccountInvoiceLine(models.Model):
             return {'warning': warning}
 
         if not self.product_id:
-            if type not in ('in_invoice', 'in_refund'):
+            if move_type not in ('in_invoice', 'in_refund'):
                 self.price_unit = 0.0
             domain['uom_id'] = []
         else:
@@ -113,24 +113,30 @@ class AccountInvoiceLine(models.Model):
                 product = self.product_id
 
             self.name = product.partner_ref
-            account = self.get_invoice_line_account(type, product, fpos, company)
+            account = self.get_invoice_line_account(move_type, product, fpos, company)
             if account:
                 self.account_id = account.id
-            self._set_taxes()
+            self._get_computed_taxes()
 
-            if type in ('in_invoice', 'in_refund'):
+            if move_type in ('in_invoice', 'in_refund'):
                 if product.description_purchase:
                     self.name += '\n' + product.description_purchase
             else:
                 if product.description_sale:
                     self.name += '\n' + product.description_sale
 
-            if not self.uom_id or product.uom_id.category_id.id != self.uom_id.category_id.id:
-                self.uom_id = product.uom_id.id
+            if not self.product_uom_id or product.uom_id.category_id.id != self.product_uom_id.category_id.id:
+                self.product_uom_id = product.uom_id.id
             domain['uom_id'] = [('category_id', '=', product.uom_id.category_id.id)]
 
             if company and currency:
 
-                if self.uom_id and self.uom_id.id != product.uom_id.id:
-                    self.price_unit = product.uom_id._compute_price(self.price_unit, self.uom_id)
+                if self.product_uom_id and self.product_uom_id.id != product.uom_id.id:
+                    self.price_unit = product.uom_id._compute_price(self.price_unit, self.product_uom_id)
         return {'domain': domain}
+
+    def get_invoice_line_account(self, type, product, fpos, company):
+        accounts = product.product_tmpl_id.get_product_accounts(fpos)
+        if type in ('out_invoice', 'out_refund'):
+            return accounts['income']
+        return accounts['expense']

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'AhoraSoft Modulo THIEMED en facturas',
-    'version': '1.0.1',
+    'version': '1.0.2',
     'category': 'sale',
     'author': 'Ahorasoft',
     'summary': 'Customized invoice Management',

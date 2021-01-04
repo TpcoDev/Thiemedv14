@@ -22,7 +22,7 @@ class SO(models.Model):
             for ref in self.referencia_ids:
                 vals['referencias'].append(
                     (0, 0, {
-                        'origen': ref.folio,
+                        'origin': ref.folio,
                         'sii_referencia_TpoDocRef': ref.sii_referencia_TpoDocRef.id,
                         'motivo': ref.motivo,
                         'fecha_documento': ref.fecha_documento,
@@ -46,7 +46,7 @@ class SO(models.Model):
         #     if self.referencia_ids:
         #         for ref in self.referencia_ids:
         #             data = {
-        #                     'origen': ref.folio,
+        #                     'origin': ref.folio,
         #                     'sii_referencia_TpoDocRef': ref.sii_referencia_TpoDocRef.id,
         #                     'date': ref.fecha_documento,
         #                     'stock_picking_id': do_pick.id

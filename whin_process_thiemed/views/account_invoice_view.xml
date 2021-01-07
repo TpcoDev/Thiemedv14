@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="custom_account_invoice_form_inherited" model="ir.ui.view">
+            <field name="name">custom.account.invoice.custom.form.inherited</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <field name="invoice_date" position="after">
+                    <field name="analytic_tag_ids" groups="analytic.group_analytic_accounting" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

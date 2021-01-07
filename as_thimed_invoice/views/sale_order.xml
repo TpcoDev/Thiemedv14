@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="view_order_ref_form" model="ir.ui.view">
+		<field name="name">view_order_ref_form.form</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//field[@name='client_order_ref']" position="after">
+				
+						<field name="as_reference" />
+					
+			</xpath>
+		<xpath expr="//page[@name='other_information']" position="inside">
+				<field name="referencia_ids" mode="tree">
+					<tree editable="bottom">
+						<field name="fecha_documento" />
+						<field name="folio" required="True" />
+						<field name="sii_referencia_TpoDocRef" required="True" />
+						<field name="motivo" />
+					</tree>
+				</field>
+			</xpath>
+		</field>
+	</record>
+	<record id="view_account_move_ref_form" model="ir.ui.view">
+		<field name="name">view_account.move_ref_form.form</field>
+		<field name="model">account.move</field>
+		<field name="inherit_id" ref="account.view_move_form" />
+		<field name="arch" type="xml">
+
+
+			<xpath expr="//page[@id='other_tab']" position="inside">
+			<group>
+				<field name="as_reference" />
+			</group>
+				<field name="referencias" mode="tree">
+					<tree editable="bottom">
+						<field name="fecha_documento" />
+						<field name="folio" required="True" />
+						<field name="sii_referencia_TpoDocRef" required="True" />
+						<field name="motivo" />
+					</tree>
+				</field>
+			</xpath>
+
+		</field>
+	</record>
+</odoo>

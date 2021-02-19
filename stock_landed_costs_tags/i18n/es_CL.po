@@ -1,0 +1,42 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* stock_landed_costs_tags
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-06-11 20:16+0000\n"
+"PO-Revision-Date: 2019-06-11 20:16+0000\n"
+"Last-Translator: Alexander Olivares <aoa@odoolatam.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_landed_costs_tags
+#: model:ir.model.fields,field_description:stock_landed_costs_tags.field_stock_landed_cost_analytic_tag_id
+msgid "Analytic tag"
+msgstr "Etiqueta analítica"
+
+#. module: stock_landed_costs_tags
+#: model:ir.model.fields,help:stock_landed_costs_tags.field_stock_landed_cost_analytic_tag_id
+msgid "Analytic tag associated with the invoice. E.g. DIM1"
+msgstr "Etiqueta analítica asociada a la factura. E.j. DIM1"
+
+#. module: stock_landed_costs_tags
+#: model:product.product,name:stock_landed_costs_tags.product_product_landed_cost
+#: model:product.template,name:stock_landed_costs_tags.product_product_landed_cost_product_template
+msgid "Landed Cost"
+msgstr "Coste de envío"
+
+#. module: stock_landed_costs_tags
+#: model:ir.ui.view,arch_db:stock_landed_costs_tags.view_stock_landed_cost_form_inherit
+msgid "Search"
+msgstr "Buscar"
+
+#. module: stock_landed_costs_tags
+#: model:ir.model,name:stock_landed_costs_tags.model_stock_landed_cost
+msgid "Stock Landed Cost"
+msgstr "Coste en destino"

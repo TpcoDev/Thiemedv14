@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_edi_form" model="ir.ui.view">
+        <field name="model">stock.picking</field>
+        <field name="name">stock.picking.edi.form</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//header//button[@name='action_cancel']" position="after">
+                <field name="l10n_cl_sii_send_file" invisible="1" />
+                <field name="l10n_cl_draft_status" invisible="1" />
+                <button name="create_delivery_guide" string="Create Delivery Guide" type="object" />
+                <button name="print_delivery_guide_pdf" string="Print Delivery Guide" type="object"
+                    attrs="{'invisible':[('l10n_cl_sii_send_file', '=', False)]}" />
+            </xpath>
+            <xpath expr="//header" position="after">
+                <field name="l10n_cl_dte_file" invisible="1" />
+                <div class="alert alert-warning text-center" role="alert"
+                    attrs="{'invisible': ['|', ('l10n_cl_dte_file', '!=', False), ('l10n_cl_draft_status', '=', False)]}">
+                    Sequence not found for delivery guide. Please, set the first number into Delivery Guide Number field
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="as_amount_total" />
+                <field name="l10n_latam_document_number" attrs="{'readonly': [('l10n_cl_draft_status', '=', False)]}" />
+                <!-- <button name="l10n_cl_set_delivery_guide_to_draft" string="⇒ Set to Draft" class="oe_inline oe_link" />
+                <button name="l10n_cl_confirm_draft_delivery_guide" type="object" string="⇒ Confirm"
+                    class="oe_inline oe_link" /> -->
+                <field name="as_use_document" />
+                <label for="l10n_cl_dte_status" />
+                <div>
+                    <field name="l10n_cl_dte_status" class="oe_inline" />
+                    <button name="l10n_cl_send_dte_to_sii" type="object"
+                        attrs="{'invisible': [('l10n_cl_dte_status', '!=', 'not_sent')]}" string="⇒ Enviar ahora a SII"
+                        class="oe_inline oe_link" groups="base.group_user" />
+                    <button name="l10n_cl_verify_dte_status" type="object"
+                        attrs="{'invisible': [('l10n_cl_dte_status', '!=', 'ask_for_status')]}"
+                        context="{'send_immediately': True}" string="⇒ Verificar en SII" class="oe_inline oe_link"
+                        groups="base.group_user" />
+                </div>
+            </xpath>
+            <xpath expr="//notebook//page[@name='note']" position="after">
+                <page string="Guia de Despacho" name="electronic_invoice">
+                    <group>
+                        <field name="l10n_latam_document_type_id" />
+                        <field name="l10n_cl_sii_send_ident" />
+                        <field name="invoice_date" />
+                        <!-- <field name="journal_id" /> -->
+                        <field name="date_invoice" />
+
+
+                        <field name="l10n_cl_sii_barcode" />
+
+                        <field name="l10n_cl_reference_ids" mode="tree">
+                            <tree editable="bottom">
+                                <field name="origin_doc_number" />
+                                <field name="date" />
+                                <field name="reference_doc_code" />
+                                <field name="l10n_cl_reference_doc_type_selection" />
+                                <field name="reason" />
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_edi_tree" model="ir.ui.view">
+        <field name="model">stock.picking</field>
+        <field name="name">stock.picking.edi.tree</field>
+        <field name="inherit_id" ref="stock.vpicktree" />
+        <field name="arch" type="xml">
+            <field name="json_popover" position="after">
+                <field name="l10n_cl_dte_status" />
+            </field>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,11 @@
+-
+  Configuration Settings
+-
+  !record {model: res.config.settings, id: config_settings}:
+    {
+        # Invoicing
+        'group_analytic_accounting': True,
+    }
+-
+  !python {model: res.config.settings}: |
+    self.browse(ref('config_settings')).execute()

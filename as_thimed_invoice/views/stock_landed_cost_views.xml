@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_landed_cost_form_inherit" model="ir.ui.view">
+        <field name="name">view.stock.landed.cost.form.inherit</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[1]" position="after">
+                <button name="search_tags" string="Buscar" class="oe_highlight" type="object"/>
+            </xpath>
+            <xpath expr="//field[@name='account_move_id']" position="after">
+                <field name="analytic_tag_id"/>
+            </xpath>
+            <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='additional_landed_cost']" position="after">
+                <field name="new_cost"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

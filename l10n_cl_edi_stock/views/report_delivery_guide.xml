@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="external_layout_boxed">
+            <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+                <div class="o_boxed_header">
+                    <t t-set="report_date" t-value="o.scheduled_date.date()"/>
+                    <t t-set="report_number" t-value="int(o.l10n_latam_document_number)"/>
+                    <t t-set="report_name" t-value="'GUÍA DE DESPACHO ELECTRÓNICA'"/>
+                    <t t-set="header_address" t-value="o.company_id.partner_id"/>
+                    <t t-set="custom_footer">
+                        <t t-call="l10n_cl.custom_footer"/>
+                    </t>
+                    <div>
+                        <div class="row">
+                            <div name="left-upper-side" class="col-8">
+                                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 100px;" alt="Logo"/>
+                                <br/>
+                                <strong>
+                                    <span t-field="o.company_id.partner_id.name"/>
+                                </strong>
+                                <br/>
+                                <span name="company_activity" class="font-italic" t-field="o.company_id.l10n_cl_activity_description"/>
+                                <div/>
+                                <t t-esc="' - '.join([item for item in [', '.join([item for item in [header_address.street, header_address.street2] if item]),                                     header_address.city,                                     header_address.state_id and header_address.state_id.name,                                     header_address.zip,                                     header_address.country_id and header_address.country_id.name] if item])"/>
+                                <span t-if="header_address.phone">
+                                  <br/>
+                                </span>
+                                <span t-if="header_address.phone" style="white-space: nowrap;" t-esc="'Tel: ' + header_address.phone"/>
+                                <span t-if="header_address.website">
+                                    <span t-att-style="'color: %s;' % o.company_id.primary_color" t-esc="'- Web: %s' %' - '.join([item for item in [header_address.website.replace('https://', '').replace('http://', ''), header_address.email] if item])"/>
+                                </span>
+                            </div>
+                            <div name="right-upper-side" class="col-4">
+                                <div class="row">
+                                    <div name="right-upper-side" class="col-12">
+                                        <div class="row border border-dark">
+                                            <div class="col-12 text-center">
+                                                <h6 t-att-style="'color: %s;' % o.company_id.primary_color">
+                                                    <strong t-att-style="'color: %s;' % o.company_id.primary_color">
+                                                        <br/>
+                                                        <span style="line-height: 180%;">RUT:</span>
+                                                        <span t-field="o.company_id.partner_id.vat"/>
+                                                        <br/>
+                                                        <span class="text-uppercase" t-esc="report_name"/>
+                                                        <br/>
+                                                        <span>Nº:</span>
+                                                        <span style="line-height: 200%;" t-esc="report_number"/><br /><br />
+                                                    </strong>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        <!-- (6) Titulo de Documento -->
+                                        <div class="row text-center">
+                                            <div class="col-12 text-center" t-att-style="'color: %s;' % o.company_id.primary_color" name="regional-office">
+                                                <span t-field="o.company_id.l10n_cl_sii_regional_office"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div t-attf-class="article o_report_layout_boxed o_company_#{company.id}_layout" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <div class="pt-5">
+                    <!-- This div ensures that the address is not cropped by the header. -->
+                    <t t-call="web.address_layout"/>
+                </div>
+                <t t-raw="0"/>
+            </div>
+        </template>
+
+        <template id="external_layout">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+
+            <!--
+            <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}"><t t-raw="0"/></t>
+            <t t-else="else" t-call="web.external_layout_standard"><t t-raw="0"/></t>-->
+            <t t-call="l10n_cl_edi_stock.external_layout_boxed"><t t-raw="0"/></t>
+        </template>
+
+        <template id="informations" inherit_id="l10n_cl_edi.informations">
+            <span t-esc="o.invoice_date_due" t-options='{"widget": "date"}' position="replace"/>
+            <span t-esc="o.invoice_payment_term_id.name or ''" position="replace"/>
+            <t t-if="o.invoice_incoterm_id" position="replace">
+                <br /><strong>Order:</strong><span t-field="o.name"/>
+            </t>
+            <!-- <t t-if="o.l10n_cl_reference_ids" position="replace"/>falta en la guia, pero quitado para avazar -->
+        </template>
+
+        <template id="barcode_stamp_footer">
+            <div name="stamp">
+                <t t-if="o.l10n_cl_sii_barcode" t-set="barcode_stamp" t-value="o._pdf417_barcode(o.l10n_cl_sii_barcode)"/>
+                <t t-if="barcode_stamp">
+                    <img class="img-fluid" t-attf-src="data:image/*;base64,{{barcode_stamp}}"/>
+                    <p t-att-style="'color: %s;' % o.company_id.primary_color" class="text-center small">
+                        Timbre Electrónico SII<br />
+                        Resolución Nº: <span t-field="o.company_id.l10n_cl_dte_resolution_number"/>
+                        de Fecha: <span t-field="o.company_id.l10n_cl_dte_resolution_date" t-field-options='{"widget": "date"}'/><br />
+                        Verifique documento en www.sii.cl
+                    </p>
+                </t>
+            </div>
+        </template>
+
+        <template id="delivery_guide_document">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="l10n_cl_edi_stock.external_layout">
+                        <div class="page">
+                            <div class="row">
+                                <div class="col-12">
+                                    <t t-call="l10n_cl_edi_stock.informations"/>
+                                </div>
+                            </div>
+                            <t t-set="has_unit_price" t-value="1"/>
+                            <t t-set="has_discount" t-value="0"/>
+                            <t t-set="has_subtotal" t-value="1"/>
+                            <table class="table table-sm" t-if="o.move_line_ids and o.move_ids_without_package">
+                                <t t-set="has_barcode" t-value="any(move_line.product_id and move_line.product_id.sudo().barcode or move_line.package_id for move_line in o.move_line_ids)"/>
+                                <t t-set="has_serial_number" t-value="any(move_line.lot_id or move_line.lot_name for move_line in o.move_line_ids)" groups="stock.group_production_lot"/>
+                                <thead>
+                                    <tr>
+                                        <th name="th_product">
+                                            <strong>Product</strong>
+                                        </th>
+                                        <th>
+                                            <strong>Quantity</strong>
+                                        </th>
+                                        <th name="th_serial_number" class="text-center" t-if="has_serial_number">
+                                           <strong>Lot/Serial Number</strong>
+                                        </th>
+                                        <th name="unit_price" class="text-right" t-if="has_unit_price">
+                                            <strong>Unit Price</strong>
+                                        </th>
+                                        <th name="discount" class="text-right" t-if="has_discount">
+                                            <strong>Discount</strong>
+                                        </th>
+                                        <th name="subtotal" class="text-right" t-if="has_subtotal">
+                                            <strong>Total</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.move_ids_without_package" t-as="move">
+                                        <!-- In case you come across duplicated lines, ask NIM or LAP -->
+                                        <t t-foreach="move.move_line_ids.sorted(key=lambda ml: ml.location_id.id)" t-as="ml">
+                                            <tr>
+                                                <td>
+                                                    <span t-field="ml.product_id.display_name"/><br/>
+                                                    <span t-field="ml.product_id.description_picking"/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-if="o.state != 'done'" t-field="ml.product_uom_qty"/>
+                                                    <span t-if="o.state == 'done'" t-field="ml.qty_done"/>
+                                                    <span t-field="ml.product_uom_id" groups="uom.group_uom"/>
+                                                </td>
+                                                <td class="text-center h6" t-if="has_serial_number">
+                                                    <img t-if="has_serial_number and (ml.lot_id or ml.lot_name)" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=1' % ('Code128', ml.lot_id.name or ml.lot_name, 400, 100)" style="width:100%;height:35px;" alt="Barcode"/>
+                                                </td>
+                                                <td class="text-right" t-if="has_unit_price">
+                                                    <span t-esc="'{:.2f}'.format(ml.product_id.lst_price)"/>
+                                                </td>
+                                                <td class="text-right" t-if="has_discount">
+                                                    <span t-esc="ml.discount"/>
+                                                </td>
+                                                <td class="text-right" t-if="has_subtotal">
+                                                    <span t-if="o.state != 'done'" t-esc="ml.product_id.lst_price * ml.product_uom_qty" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                                    <span t-if="o.state == 'done'" t-esc="ml.product_id.lst_price * ml.qty_done" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                  </tbody>
+                            </table>
+                            <div class="clearfix">
+                                <div id="total" class="row">
+                                    <t t-set="amounts" t-value="o._l10n_cl_get_amounts()"/>
+                                    <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ml-auto">
+                                        <table class="table table-sm" style="page-break-inside: avoid;">
+                                            <tr t-if="amounts.get('subtotal_amount_taxable', False)" class="border-black o_subtotal">
+                                                <td><strong>Subtotal Neto</strong></td>
+                                                <td class="text-right">
+                                                  <span t-esc="amounts['subtotal_amount_taxable']" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                                </td>
+                                            </tr>
+                                            <tr t-if="amounts.get('subtotal_amount_exempt', False)" class="border-black o_subtotal">
+                                                <td><strong>Subtotal Exento</strong></td>
+                                                <td class="text-right">
+                                                  <span t-esc="amounts['subtotal_amount_exempt']" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                                </td>
+                                            </tr>
+                                            <tr t-if="amounts.get('vat_percent', False)" class="border-black o_subtotal">
+                                                <td><strong t-esc="'IVA %s ' % amounts['vat_percent']"/><strong>%</strong></td>
+                                                <td class="text-right">
+                                                    <span t-esc="amounts['vat_amount']" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                                </td>
+                                            </tr>
+                                            <t t-foreach="withholdings" t-as="tax">
+                                                <tr>
+                                                    <td><span class="text-nowrap" t-esc="'%s %s' % (tax['tax_name'], tax['tax_percent'])"/><span>%</span></td>
+                                                    <td class="text-right o_price_total">
+                                                        <span class="text-nowrap" t-esc="tax['tax_amount']"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                            <tr class="border-black o_total">
+                                                <td><strong>Total</strong></td>
+                                                <td class="text-right">
+                                                    <span class="text-nowrap" t-esc="amounts['total_amount']" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                                </td>
+                                            </tr>
+                                            <t t-if="print_with_payments">
+                                                <t t-if="o.payment_state != 'invoicing_legacy'">
+                                                    <t t-set="payments_vals" t-value="o.sudo()._get_reconciled_info_JSON_values()"/>
+                                                    <t t-foreach="payments_vals" t-as="payment_vals">
+                                                        <tr>
+                                                            <td>
+                                                                <i class="oe_form_field text-right oe_payment_label">Paid on <t t-esc="payment_vals['date']" t-options="{&quot;widget&quot;: &quot;date&quot;}"/></i>
+                                                            </td>
+                                                            <td class="text-right">
+                                                                <span t-esc="payment_vals['amount']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                    <t t-if="len(payments_vals) &gt; 0">
+                                                        <tr class="border-black">
+                                                            <td><strong>Amount Due</strong></td>
+                                                            <td class="text-right">
+                                                                <span t-field="o.amount_residual"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-5">
+                                    <t t-call="l10n_cl_edi_stock.barcode_stamp_footer"/>
+                                </div>
+                                <div class="col-7 text-justify">
+                                    <br />
+                                    <p t-field="o.note"/>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <report id="delivery_guide_report_pdf"
+            name="l10n_cl_edi_stock.delivery_guide_document"
+            string="Guía de Despacho E. SII (DTE 52)"
+            report_type="qweb-pdf"
+            file="'GDE %s' % (object.name)"
+            print_report_name="'Guía Despacho 52 %s' % (object.name)"
+            model="stock.picking"/>
+
+    </data>
+</odoo>

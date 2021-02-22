@@ -11,12 +11,13 @@
 					
 			</xpath>
 		<xpath expr="//page[@name='other_information']" position="inside">
-				<field name="referencia_ids" mode="tree">
+				<field name="referencias" mode="tree">
 					<tree editable="bottom">
-						<field name="fecha_documento" />
-						<field name="folio" required="True" />
-						<field name="sii_referencia_TpoDocRef" required="True" />
-						<field name="motivo" />
+						<field name="origin_doc_number" />
+						<field name="date" />
+						<field name="reference_doc_code" />
+						<field name="l10n_cl_reference_doc_type_selection" />
+						<field name="reason" />
 					</tree>
 				</field>
 			</xpath>
@@ -35,10 +36,11 @@
 			</group>
 				<field name="referencias" mode="tree">
 					<tree editable="bottom">
-						<field name="fecha_documento" />
-						<field name="folio" required="True" />
-						<field name="sii_referencia_TpoDocRef" required="True" />
-						<field name="motivo" />
+						<field name="origin_doc_number" />
+						<field name="date" />
+						<field name="reference_doc_code" />
+						<field name="l10n_cl_reference_doc_type_selection" />
+						<field name="reason" />
 					</tree>
 				</field>
 			</xpath>

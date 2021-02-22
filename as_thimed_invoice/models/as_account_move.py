@@ -9,18 +9,18 @@ class SO(models.Model):
 
 
     referencias = fields.One2many(
-        'sale.order.referencias',
-        'mv_id',
+        'l10n_cl.account.invoice.reference',
+        'move_id',
         string="Referencias de documento"
     )
     as_reference= fields.Char('Referencia/Descripción')
 
-    @api.onchange('referencia_ids')
-    @api.depends('referencia_ids')
+    @api.onchange('referencias')
+    @api.depends('referencias')
     def gte_refrencia(self):
         if self.referencias:
-            self.as_reference = self.referencias[0].folio
-            self.ref = self.referencias[0].folio
+            self.as_reference = self.referencias[0].origin_doc_number
+            self.ref = self.referencias[0].origin_doc_number
 
 
 class SaleAdvancePaymentInv(models.TransientModel):
@@ -29,8 +29,8 @@ class SaleAdvancePaymentInv(models.TransientModel):
     def _create_invoice(self, order, so_line, amount):
         res = super(SaleAdvancePaymentInv,self)._create_invoice(order, so_line, amount)
         vals = []
-        if order.referencia_ids:
-            for ref in order.referencia_ids:
+        if order.referencias:
+            for ref in order.referencias:
                 vals.append(ref.id)
             res.write({'referencias':vals,'as_reference':order.as_reference})
       
